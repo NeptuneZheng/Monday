@@ -1,3 +1,22 @@
-<p>login page</p>
+<form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+  <div class="row">
+    <label for="inputName" class="col-md-2">Name</label>
+    <div class="col-md-6 offset-md-1">
+      <input id="inputName" placeholder="Name" formControlName="name">
+    </div>
+  </div>
+  <div class="row">
+    <label for="inputPassword3" class="col-md-2">Password</label>
+    <div class="col-md-6 offset-md-1">
+      <input type="password" class="" id="inputPassword3" placeholder="Password" formControlName="password">
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <button type="submit" [disabled]="!checkoutForm.valid"> Submit </button>
+      <!--button 放在form表单中的type默认为submit而不是button,点击后会做表单提交而不是起button的作用 -->
+    </div>
+  </div>
+</form>
 
 

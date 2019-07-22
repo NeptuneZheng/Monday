@@ -10,7 +10,7 @@ const httpOptions = {
 };
 
 @Injectable({ providedIn: 'root' })
-export class HeroService implements OnInit {
+export class LoginService implements OnInit {
 
   constructor(
     private http: HttpClient,
@@ -25,7 +25,7 @@ export class HeroService implements OnInit {
     console.log(`service get the request url: ${url}`);
     return  this.http.get<Hero>("http://localhost:8080/cHeroes/1").pipe(
       tap(_ => this.log('fetched heroes')),
-      catchError(this.handleError<Hero[]>('getHeroes', []))
+      catchError(this.handleError<Hero>('getHeroes', null))
     );
   }
 
@@ -39,6 +39,6 @@ export class HeroService implements OnInit {
   }
 
   private log(message: string) {
-    this.messageService.add(`HeroService: ${message}`);
+    this.messageService.add(`LoginService: ${message}`);
   }
 }
