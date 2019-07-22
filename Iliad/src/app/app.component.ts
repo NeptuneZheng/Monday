@@ -1,9 +1,8 @@
-import { Component } from '@angular/core';
-import { HttpClientModule, HttpClient, HttpHeaders } from '@angular/common/http';
-import {Observable, of} from "rxjs";
-import { catchError, map, tap } from 'rxjs/operators';
+import {Component, OnInit} from '@angular/core';
+import {Observable} from "rxjs";
 import {Hero} from './model/hero'
-import {MessageService} from "./util/service";
+import {HeroService} from "./services/services.component";
+import {FormBuilder} from "@angular/forms";
 
 @Component({
   selector: 'app-root',
@@ -11,37 +10,31 @@ import {MessageService} from "./util/service";
   styleUrls: ['./app.component.css']
 })
 
-const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-};
+export class AppComponent{
 
-export class AppComponent {
-  private heroesUrl = '/cHeroes';
   title = 'Iliad';
+  checkoutForm;
 
   constructor(
-    private http: HttpClient,
-    private messageService: MessageService) { }
-
-  getHero(id: number):Observable<Hero>{
-    const url = `${this.heroesUrl}/${id}`;
-    return this.http.get<Hero>(url).pipe(
-      tap(_ => this.log(`fetched hero id=${id}`)),
-      catchError(this.handleError<Hero>(`getHero id=${id}`))
-    );
+    private heroService: HeroService,
+    private formBuilder: FormBuilder
+  ){
+    this.checkoutForm = this.formBuilder.group({
+      name: '',
+      password: ''
+    });
   }
 
-  private handleError<T> (operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-
-      console.error(error); // log to console instead
-      this.log(`${operation} failed: ${error.message}`);
-      return of(result as T);
-    };
+  onSubmit(loginData){
+    console.warn('Your login info has been submitted', loginData);
   }
 
-  private log(message: string) {
-    this.messageService.add(`HeroService: ${message}`);
-  }
+  getHero():Observable<Hero>{
+    console.log("get the request start");
+    var tmp = this.heroService.getHero();
+    tmp.forEach(next => console.log(next));
+    console.log("get the request finish: ");
 
+    return tmp
+  }
 }

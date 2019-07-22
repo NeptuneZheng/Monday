@@ -3,6 +3,7 @@ import {MessageService} from "../util/service";
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {Observable, of} from "rxjs";
 import {Hero} from "../model/hero";
+import {catchError, tap} from "rxjs/operators";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' })
@@ -17,20 +18,15 @@ export class HeroService implements OnInit {
 
   ngOnInit() {
   }
-  private heroesUrl = 'http://localhost:8080/cHeroes';
+  private Url = 'http://localhost:8080/';
 
-  getHero():Observable<Hero>{
-    const url = `${this.heroesUrl}/1`;
+  login():Observable<Hero>{
+    const url = `${this.Url}/1`;
     console.log(`service get the request url: ${url}`);
-    // var h1 = this.http.get("http://localhost:8080/cHeroes/1").subscribe(data => console.log("testing ......"));
-    // // var test = "https://www.baidu.com/";
-    // // this.http.get("http://localhost:8080/cHeroes/1").subscribe(
-    // //   date => {
-    // //     console.log("testing ......");
-    // //   }
-    // // );
-    // console.log(h1.toString());
-    return  this.http.get<Hero>("http://localhost:8080/cHeroes/1");
+    return  this.http.get<Hero>("http://localhost:8080/cHeroes/1").pipe(
+      tap(_ => this.log('fetched heroes')),
+      catchError(this.handleError<Hero[]>('getHeroes', []))
+    );
   }
 
   private handleError<T> (operation = 'operation', result?: T) {
