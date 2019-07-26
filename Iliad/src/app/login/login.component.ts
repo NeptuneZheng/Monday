@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {Observable} from "rxjs";
-import {FormControl, FormGroup} from "@angular/forms";
+import {FormBuilder, Validators} from "@angular/forms";
 import {LoginService} from "../services/service.login.component";
 import {Hero} from "../model/hero";
+import {User} from "../model/user";
+import {tap} from "rxjs/internal/operators";
 
 
 @Component({
@@ -13,31 +15,30 @@ import {Hero} from "../model/hero";
 export class LoginComponent{
 
   checkoutForm;
+  result: boolean;
 
   constructor(
     private loginService: LoginService,
+    private formBuilder: FormBuilder
   ){
-    this.checkoutForm = new FormGroup({
-      name: new FormControl(''),
-      password: new FormControl('')
-    });
+
+    this.checkoutForm = formBuilder.group({
+      name: ['', Validators.required],
+      password: ['', Validators.required]
+    })
   }
 
   onSubmit(){
     console.warn('Your login info has been submitted', this.checkoutForm.value);
     this.getHero();
-    this.checkoutForm.patchValue({
-      name: 'success'
-    })
   }
 
-  getHero():Observable<Hero>{
+  getHero(){
     console.log("get the request start");
-    var tmp = this.loginService.login();
-    tmp.forEach(next => console.log(next));
+    let user = new User(this.checkoutForm.value.name,this.checkoutForm.value.password);
+    let tmp = this.loginService.login(user).forEach(next =>{this.result = next});
     console.log("get the request finish: ");
 
-    return tmp
   }
 
 }
