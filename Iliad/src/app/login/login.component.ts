@@ -1,10 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import {Observable} from "rxjs";
+import { Component} from '@angular/core';
 import {FormBuilder, Validators} from "@angular/forms";
 import {LoginService} from "../services/service.login.component";
-import {Hero} from "../model/hero";
 import {User} from "../model/user";
-import {tap} from "rxjs/internal/operators";
 
 
 @Component({
